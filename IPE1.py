@@ -30,3 +30,26 @@ print(df.shape)
 scatter_matrix(df, figsize=(8, 8), diagonal='kde')
 plt.suptitle("Scatter Matrix")
 plt.show()
+
+parallel_coordinates(df, 'Duration', cols=['Pulse', 'Maxpulse', 'Calories'])
+plt.title("Parallel Coordinates for Duration vs Pulse, Maxpulse, Calories")
+plt.show()
+
+crosstab = pd.crosstab(df['Duration'], df['Pulse'])
+print('Cross-tabulation for Duration vs Pulse:\n', crosstab)
+
+def detect_outliers(data):
+    Q1 = np.percentile(data, 25)
+    Q3 = np.percentile(data, 75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    return data[(data < lower_bound) | (data > upper_bound)]
+
+outliers_maxpulse = detect_outliers(df['Maxpulse'])
+if not outliers_maxpulse.empty:
+    print("Outliers in Maxpulse:\n", outliers_maxpulse)
+else:
+    print("No outliers found in Maxpulse.")
+
+    
